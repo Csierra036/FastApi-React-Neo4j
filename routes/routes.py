@@ -37,6 +37,7 @@ async def create_node(node: Node):
     #Send Query to the database
     results=session.run(query,data)
 
+    session.close()
     driver_neo4j.close() #Close Connection
 
 @router.put("/update")
@@ -58,4 +59,20 @@ async def delete_node(name: str):
 
     session.run(query,data)
     session.close()
+    driver_neo4j.close()
     return("Node drop sucessful")
+
+#Query For Search all nodes with the atribute Estudiantes
+@router.get("/students")
+async def search_students():
+    driver_neo4j=connection()
+    session=driver_neo4j.session()
+    query= """ MATCH (p:Persona{actividad:"Estudiante"}) RETURN p """
+
+    result= session.run(query)
+    estudiantes = [record["p"] for record in result]
+
+    session.close()
+    driver_neo4j.close()
+
+    return{"estudiantes": estudiantes}

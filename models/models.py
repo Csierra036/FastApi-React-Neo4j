@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 
 class Node(BaseModel):
-    id: int
     name: str
     edad: int
     actividad: str
